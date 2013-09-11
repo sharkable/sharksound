@@ -33,6 +33,7 @@ class Sound {
 
  protected:
   Sound(SoundController *sound_controller);
+  virtual ~Sound();
   void IncrementRetainCount();
   void SetOn(bool on);
   void SetGlobalVolume(float volume);

@@ -24,6 +24,7 @@ class SoundController {
 
  protected:
   SoundController();
+  ~SoundController();
   virtual Sound * CreateSound(std::string filename) = 0;
 
  private:

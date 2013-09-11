@@ -33,6 +33,9 @@ Sound::Sound(SoundController *sound_controller)
       global_volume_(1.f) {
 }
 
+Sound::~Sound() {
+}
+
 void Sound::IncrementRetainCount() {
   retain_count_++;
 }

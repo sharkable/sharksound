@@ -46,6 +46,12 @@ SoundController::SoundController()
       global_volume_(1.f) {
 }
 
+SoundController::~SoundController() {
+  for (auto i = sounds_.begin(); i != sounds_.end(); i++) {
+    delete i->second;
+  } 
+}
+
 
 #pragma mark - Private
 
