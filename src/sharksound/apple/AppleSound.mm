@@ -9,12 +9,11 @@
 #include "sharksound/apple/AppleSound.h"
 
 using namespace SharkSound;
-using std::string;
 
 ALCcontext *AppleSound::context__ = NULL;
 ALCdevice *AppleSound::device__ = NULL;
 
-AppleSound::AppleSound(SoundController *sound_controller, const string &filename)
+AppleSound::AppleSound(SoundController *sound_controller, const std::string &filename)
     : Sound(sound_controller),
       loop_source_id_(-1),
       loop_volume_(1.f) {
@@ -145,12 +144,10 @@ bool AppleSound::PlayLoop() {
   return true;
 }
 
-bool AppleSound::StopLoop() {
-  if (loop_source_id_ == -1) {
-    return false;
+void AppleSound::StopLoop() {
+  if (loop_source_id_ != -1) {
+    alSourceStop(loop_source_id_);
   }
-  alSourceStop(loop_source_id_);
-  return true;
 }
 
 void AppleSound::RewindLoop() {

@@ -21,7 +21,7 @@ class AppleSound : public Sound {
   // Sound
   bool Play(float volume = 1.f, float position = 0.f);
   bool PlayLoop();
-  bool StopLoop();
+  void StopLoop();
   void RewindLoop();
   void SetLoopVolume(float volume);
   float LoopVolume();

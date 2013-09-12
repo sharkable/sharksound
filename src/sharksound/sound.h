@@ -20,7 +20,7 @@ class Sound {
 
   // Play this sound looped.
   virtual bool PlayLoop() = 0;
-  virtual bool StopLoop() = 0;
+  virtual void StopLoop() = 0;
   virtual void RewindLoop() = 0;
   virtual void SetLoopVolume(float volume) = 0;
   virtual float LoopVolume() = 0;

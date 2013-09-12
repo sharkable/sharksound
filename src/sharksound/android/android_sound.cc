@@ -11,7 +11,6 @@
 #include "sharksound/android/android_sound_instance.h"
 
 using namespace SharkSound;
-using std::string;
 
 AndroidSound::AndroidSound(SoundController *sound_controller)
     : Sound(sound_controller),
@@ -27,7 +26,7 @@ AndroidSound::~AndroidSound() {
 }
 
 bool AndroidSound::Init(AAssetManager *asset_manager, SLEngineItf sl_engine_itf,
-                        SLDataSink sl_data_sink, string filename) {
+                        SLDataSink sl_data_sink, std::string filename) {
   sl_engine_itf_ = sl_engine_itf;
   sl_data_sink_ = sl_data_sink;
 
@@ -88,6 +87,7 @@ bool AndroidSound::PlayLoop() {
   }
   if (!loop_instance_) {
     loop_instance_ = CreateNewInstance();
+    loop_instance_->SetVolume(loop_volume_);
   }
   if (!loop_instance_) {
     return false;
@@ -95,30 +95,23 @@ bool AndroidSound::PlayLoop() {
   loop_instance_->PlayLoop();
 }
 
-bool AndroidSound::StopLoop() {
-  if (!loop_instance_) {
-    return false;
+void AndroidSound::StopLoop() {
+  if (loop_instance_) {
+    loop_instance_->Stop();
   }
-  loop_instance_->Stop();
-  return true;
 }
 
 void AndroidSound::RewindLoop() {
-  if (!loop_instance_) {
-    return;
+  if (loop_instance_) {
+    loop_instance_->Rewind();
   }
-  loop_instance_->Rewind();
 }
 
 void AndroidSound::SetLoopVolume(float volume) {
   loop_volume_ = volume;
-  if (!loop_instance_) {
-    loop_instance_ = CreateNewInstance();
+  if (loop_instance_) {
+    loop_instance_->SetVolume(volume * global_volume_);
   }
-  if (!loop_instance_) {
-    return;
-  }
-  loop_instance_->SetVolume(volume * global_volume_);
 }
 
 float AndroidSound::LoopVolume() {
@@ -126,17 +119,13 @@ float AndroidSound::LoopVolume() {
 }
 
 void AndroidSound::SetLoopPosition(float position) {
-  if (!loop_instance_) {
-    loop_instance_ = CreateNewInstance();
+  if (loop_instance_) {
+    loop_instance_->SetPosition(position);
   }
-  if (!loop_instance_) {
-    return;
-  }
-  loop_instance_->SetPosition(position);
 }
 
 bool AndroidSound::IsLoopPlaying() {
-  return (!loop_instance_ && !loop_instance_->is_busy());
+  return (loop_instance_ && !loop_instance_->is_busy());
 }
 
 

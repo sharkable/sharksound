@@ -11,7 +11,6 @@
 #include "sharksound/android/android_sound.h"
 
 using namespace SharkSound;
-using std::string;
 
 AndroidSoundController::AndroidSoundController(AAssetManager *asset_manager)
     : asset_manager_(asset_manager),

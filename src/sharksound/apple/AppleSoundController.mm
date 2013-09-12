@@ -14,7 +14,6 @@
 #include "sharksound/apple/AppleSound.h"
 
 using namespace SharkSound;
-using std::string;
 
 AppleSoundController::AppleSoundController() : SoundController() {
 #if TARGET_OS_IPHONE
