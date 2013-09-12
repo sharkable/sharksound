@@ -20,32 +20,32 @@ AndroidSoundController::AndroidSoundController(AAssetManager *asset_manager)
       output_mix_object_(NULL) {
   SLresult result;
 
-  const SLuint32 engineMixIIDCount = 1;
-  const SLInterfaceID engineMixIIDs[] = {SL_IID_ENGINE};
-  const SLboolean engineMixReqs[] = {SL_BOOLEAN_TRUE};
+  const SLuint32 engine_mix_iid_count = 1;
+  const SLInterfaceID engine_mix_iids[] = {SL_IID_ENGINE};
+  const SLboolean engine_mix_reqs[] = {SL_BOOLEAN_TRUE};
 
-  // create engine
-  result = slCreateEngine(&engine_object_, 0, NULL, engineMixIIDCount, engineMixIIDs,
-                          engineMixReqs);
+  // Create engine.
+  result = slCreateEngine(&engine_object_, 0, NULL, engine_mix_iid_count, engine_mix_iids,
+                          engine_mix_reqs);
   assert(SL_RESULT_SUCCESS == result);
 
-  // realize the engine
+  // Realize the engine.
   result = (*engine_object_)->Realize(engine_object_, SL_BOOLEAN_FALSE);
   assert(SL_RESULT_SUCCESS == result);
 
-  // get the engine interface, which is needed in order to create other objects
+  // Get the engine interface, which is needed in order to create other objects.
   result = (*engine_object_)->GetInterface(engine_object_, SL_IID_ENGINE, &engine_engine_);
   assert(SL_RESULT_SUCCESS == result);
 
-  // create output mix
+  // Create output mix.
   result = (*engine_engine_)->CreateOutputMix(engine_engine_, &output_mix_object_, 0, NULL, NULL);
   assert(SL_RESULT_SUCCESS == result);
 
-  // realize the output mix
+  // Realize the output mix.
   result = (*output_mix_object_)->Realize(output_mix_object_, SL_BOOLEAN_FALSE);
   assert(SL_RESULT_SUCCESS == result);
 
-  // configure audio sink
+  // Configure audio sink.
   loc_outmix_ = {SL_DATALOCATOR_OUTPUTMIX, output_mix_object_};
   audio_sink_ = {&loc_outmix_, NULL};
 }
@@ -63,5 +63,5 @@ AndroidSoundController::~AndroidSoundController() {
 #pragma mark - private
 
 Sound * AndroidSoundController::CreateSound(std::string filename) {
-  return (new AndroidSound(this))->Init(asset_manager_, engine_engine_, audio_sink_, "sounds/" + filename);
+  return (new AndroidSound(this))->Init(asset_manager_, engine_engine_, audio_sink_, filename);
 }
