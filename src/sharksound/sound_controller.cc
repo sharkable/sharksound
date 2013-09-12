@@ -31,10 +31,12 @@ Sound * SoundController::GetSound(std::string filename) {
     return i->second;
   }
   Sound *sound = CreateSound(filename);
-  sound->IncrementRetainCount();
-  sound->SetGlobalVolume(global_volume_);
-  sound->SetOn(sound_on_);
-  sounds_[filename] = sound;
+  if (sound) {
+    sound->IncrementRetainCount();
+    sound->SetGlobalVolume(global_volume_);
+    sound->SetOn(sound_on_);
+    sounds_[filename] = sound;
+  }
   return sound;
 }
 
