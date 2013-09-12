@@ -16,6 +16,7 @@ using std::string;
 AndroidSound::AndroidSound(SoundController *sound_controller)
     : Sound(sound_controller),
       loop_instance_(NULL),
+      loop_volume_(1.f),
       sl_engine_itf_(NULL) {
 }
 
@@ -58,6 +59,9 @@ bool AndroidSound::Init(AAssetManager *asset_manager, SLEngineItf sl_engine_itf,
 #pragma mark - Sound
 
 bool AndroidSound::Play(float volume, float position) {
+  if (!on_) {
+    return false;
+  }
   AndroidSoundInstance *instance = NULL;
   for (auto i = sound_instances_.begin(); i != sound_instances_.end(); i++) {
     if (!(*i)->is_busy()) {
@@ -72,13 +76,16 @@ bool AndroidSound::Play(float volume, float position) {
     }
   }
   if (instance) {
-    instance->Play(volume, position);
+    instance->Play(volume * global_volume_, position);
     return true;
   }
   return false;
 }
 
 bool AndroidSound::PlayLoop() {
+  if (!on_) {
+    return false;
+  }
   if (!loop_instance_) {
     loop_instance_ = CreateNewInstance();
   }
@@ -111,7 +118,7 @@ void AndroidSound::SetLoopVolume(float volume) {
   if (!loop_instance_) {
     return;
   }
-  loop_instance_->SetVolume(volume);
+  loop_instance_->SetVolume(volume * global_volume_);
 }
 
 float AndroidSound::LoopVolume() {
