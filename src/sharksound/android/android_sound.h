@@ -12,21 +12,22 @@
 #include <android/asset_manager.h>
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
+#include <vector>
 
 #include "sharksound/sound.h"
 
 namespace SharkSound {
 
+class AndroidSoundInstance;
 class SoundController;
-struct SoundInstanceNode;
 
 class AndroidSound : public Sound {
  public:
   AndroidSound(SoundController *sound_controller);
   ~AndroidSound();
 
-  AndroidSound * Init(AAssetManager *asset_manager, SLEngineItf sl_engine_itf,
-                      SLDataSink sl_data_sink, std::string filename);
+  bool Init(AAssetManager *asset_manager, SLEngineItf sl_engine_itf, SLDataSink sl_data_sink,
+            std::string filename);
 
   // Sound
   bool Play(float volume = 1.f, float position = 0.f);
@@ -39,9 +40,9 @@ class AndroidSound : public Sound {
   bool IsLoopPlaying();
 
  private:
-  void AddSoundInstance(SoundInstanceNode **node);
+  AndroidSoundInstance * CreateNewInstance();
 
-  SoundInstanceNode *sound_instance_list_head_;
+  std::vector<AndroidSoundInstance *> sound_instances_;
 
   // OpenSL ES objects
   SLEngineItf sl_engine_itf_;

@@ -29,8 +29,8 @@ AndroidSoundInstance::~AndroidSoundInstance() {
   }
 }
 
-AndroidSoundInstance * AndroidSoundInstance::Init(SLEngineItf sl_engine_itf, SLDataSource sl_audio_source,
-                                                  SLDataSink sl_data_sink) {
+bool AndroidSoundInstance::Init(SLEngineItf sl_engine_itf, SLDataSource sl_audio_source,
+                                SLDataSink sl_data_sink) {
   assert(NULL == sl_player_object_);
   SLresult result;
 
@@ -40,29 +40,29 @@ AndroidSoundInstance * AndroidSoundInstance::Init(SLEngineItf sl_engine_itf, SLD
   result = (*sl_engine_itf)->CreateAudioPlayer(sl_engine_itf, &sl_player_object_, &sl_audio_source,
                                                &sl_data_sink, 3, interface_ids,
                                                interfaces_required);
-  if (SL_RESULT_SUCCESS != result) return NULL;
+  if (SL_RESULT_SUCCESS != result) return false;
 
   // realize the player
   result = (*sl_player_object_)->Realize(sl_player_object_, SL_BOOLEAN_FALSE);
-  if (SL_RESULT_SUCCESS != result) return NULL;
+  if (SL_RESULT_SUCCESS != result) return false;
 
   // get the play interface
   result = (*sl_player_object_)->GetInterface(sl_player_object_, SL_IID_PLAY, &sl_play_itf_);
-  if (SL_RESULT_SUCCESS != result) return NULL;
+  if (SL_RESULT_SUCCESS != result) return false;
 
   // get the volume interface
   result = (*sl_player_object_)->GetInterface(sl_player_object_, SL_IID_VOLUME, &sl_volume_itf_);
-  if (SL_RESULT_SUCCESS != result) return NULL;
+  if (SL_RESULT_SUCCESS != result) return false;
 
   // register a callback
   result = (*sl_play_itf_)->SetCallbackEventsMask(sl_play_itf_, SL_PLAYEVENT_HEADATEND);
-  if (SL_RESULT_SUCCESS != result) return NULL;
+  if (SL_RESULT_SUCCESS != result) return false;
   (*sl_play_itf_)->RegisterCallback(sl_play_itf_, play_callback, this);
 
   // enable position
   (*sl_volume_itf_)->EnableStereoPosition(sl_volume_itf_, true);
 
-  return this;
+  return true;
 }
 
 void AndroidSoundInstance::Play(float volume, float position) {
