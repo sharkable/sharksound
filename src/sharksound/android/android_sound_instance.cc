@@ -77,8 +77,8 @@ void AndroidSoundInstance::Play(float volume, float position) {
     return;
   }
 
-  (*sl_volume_itf_)->SetVolumeLevel(sl_volume_itf_, 1500.0f * log(volume));
-  (*sl_volume_itf_)->SetStereoPosition(sl_volume_itf_, 1000.0f * position);
+  SetVolume(volume);
+  SetPosition(position);
   is_busy_ = true;
 
   SLresult result = (*sl_play_itf_)->SetPlayState(sl_play_itf_, SL_PLAYSTATE_PLAYING);
@@ -102,7 +102,12 @@ void AndroidSoundInstance::Rewind() {
 }
 
 void AndroidSoundInstance::SetVolume(float volume) {
-  (*sl_volume_itf_)->SetVolumeLevel(sl_volume_itf_, 1500.0f * log(volume));
+  if (volume <= 0) {
+    (*sl_volume_itf_)->SetMute(sl_volume_itf_, SL_BOOLEAN_TRUE);
+  } else {
+    (*sl_volume_itf_)->SetMute(sl_volume_itf_, SL_BOOLEAN_FALSE);
+    (*sl_volume_itf_)->SetVolumeLevel(sl_volume_itf_, 1500.0f * log(volume));
+  }
 }
 
 void AndroidSoundInstance::SetPosition(float position) {
