@@ -13,8 +13,6 @@
 
 namespace SharkSound {
 
-class AppleSound;
-
 class AppleSoundController : public SoundController {
  public:
   AppleSoundController();
