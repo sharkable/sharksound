@@ -48,7 +48,7 @@ SharkSound::SoundController *sound_controller = NULL;
 Now your cross-platform code can load and play sounds!
 
 ```cpp
-Sound *my_sound = sound_controller->GetSound("sounds/foo.wav");
+SharkSound::Sound *my_sound = sound_controller->GetSound("sounds/foo.wav");
 my_sound->Play();
 ```
 
