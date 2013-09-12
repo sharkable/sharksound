@@ -125,7 +125,7 @@ void AndroidSound::SetLoopPosition(float position) {
 }
 
 bool AndroidSound::IsLoopPlaying() {
-  return (loop_instance_ && !loop_instance_->is_busy());
+  return (loop_instance_ && loop_instance_->is_busy());
 }
 
 
