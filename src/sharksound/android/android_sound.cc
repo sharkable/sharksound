@@ -8,6 +8,8 @@
 
 #include "sharksound/android/android_sound.h"
 
+#include <android/log.h>
+
 #include "sharksound/android/android_sound_instance.h"
 
 using namespace SharkSound;
@@ -30,15 +32,26 @@ bool AndroidSound::Init(AAssetManager *asset_manager, SLEngineItf sl_engine_itf,
   sl_engine_itf_ = sl_engine_itf;
   sl_data_sink_ = sl_data_sink;
 
-  assert(NULL != asset_manager);
+  if (NULL == asset_manager) {
+    __android_log_print(ANDROID_LOG_ERROR, "SharkSound", "Error loading %s: No AssetManager.",
+                        filename.c_str());
+    return false;
+  }
   AAsset* asset = AAssetManager_open(asset_manager, filename.c_str(), AASSET_MODE_UNKNOWN);
   // the asset might not be found
-  assert(NULL != asset);
+  if (NULL == asset) {
+    __android_log_print(ANDROID_LOG_ERROR, "SharkSound", "Error loading %s: File not found.",
+                        filename.c_str());
+    return false;
+  }
 
   // open asset as file descriptor
   off_t start, length;
   int fd = AAsset_openFileDescriptor(asset, &start, &length);
-  assert(0 <= fd);
+  if (0 >= fd) {
+    __android_log_print(ANDROID_LOG_ERROR, "SharkSound", "Error loading file %s: File not found.",
+                        filename.c_str());
+  }
   AAsset_close(asset);
 
   // configure audio source
@@ -49,6 +62,10 @@ bool AndroidSound::Init(AAssetManager *asset_manager, SLEngineItf sl_engine_itf,
   AndroidSoundInstance *instance = CreateNewInstance();
   if (instance) {
     sound_instances_.push_back(instance);
+  } else {
+    __android_log_print(ANDROID_LOG_ERROR, "SharkSound",
+                        "Error creating new sound instance for %s.", filename.c_str());
+    return false;
   }
 
   return true;

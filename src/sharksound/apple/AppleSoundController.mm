@@ -26,5 +26,10 @@ AppleSoundController::AppleSoundController() : SoundController() {
 #pragma mark - private
 
 Sound * AppleSoundController::CreateSound(std::string filename) {
-  return new AppleSound(this, filename);
+  AppleSound *sound = new AppleSound(this);
+  if (sound->Init(filename)) {
+    return sound;
+  }
+  delete sound;
+  return NULL;
 }

@@ -13,10 +13,24 @@ using namespace SharkSound;
 ALCcontext *AppleSound::context__ = NULL;
 ALCdevice *AppleSound::device__ = NULL;
 
-AppleSound::AppleSound(SoundController *sound_controller, const std::string &filename)
+AppleSound::AppleSound(SoundController *sound_controller)
     : Sound(sound_controller),
       loop_source_id_(-1),
       loop_volume_(1.f) {
+}
+
+AppleSound::~AppleSound() {
+  for (auto i = source_ids_.begin(); i != source_ids_.end(); i++) {
+    alDeleteSources(1, &(*i));
+  }
+  alDeleteSources(1, &loop_source_id_);
+  alDeleteBuffers(1, &buffer_id_);
+
+  alcDestroyContext(context__);
+  alcCloseDevice(device__);
+}
+
+bool AppleSound::Init(const std::string &filename) {
   if (device__ == NULL) {
     device__ = alcOpenDevice(NULL);
     if (device__) {
@@ -49,8 +63,8 @@ AppleSound::AppleSound(SoundController *sound_controller, const std::string &fil
     }
   }
   if (!path) {
-    NSLog(@"ERRRRRRORRRR WITH FILE URL");
-    return;  // TODO throw error... move work out of constructor.
+    printf("Error loading sound. File not found: %s\n", filename.c_str());
+    return false;
   }
 
   CFURLRef file_url = (CFURLRef)[[NSURL fileURLWithPath:path] retain];
@@ -64,7 +78,7 @@ AppleSound::AppleSound(SoundController *sound_controller, const std::string &fil
   alBufferData(buffer_id_, format, audio_data, size, freq);
 
   // add adsl;asdl;asd
-  source_ids_.push_back(CreateNewSource());  // TODO check for error
+  source_ids_.push_back(CreateNewSource());
 
   // clean up the buffer
   if (audio_data) {
@@ -73,19 +87,11 @@ AppleSound::AppleSound(SoundController *sound_controller, const std::string &fil
   }
 
   if((error = alGetError()) != AL_NO_ERROR) {
-    printf("error loading sound: %x\n", error);
+    printf("Error loading sound: %s  OpenAL error code: %x\n", filename.c_str(), error);
+    return false;
   }
-}
 
-AppleSound::~AppleSound() {
-  for (auto i = source_ids_.begin(); i != source_ids_.end(); i++) {
-    alDeleteSources(1, &(*i));
-  }
-  alDeleteSources(1, &loop_source_id_);
-  alDeleteBuffers(1, &buffer_id_);
-
-  alcDestroyContext(context__);
-  alcCloseDevice(device__);
+  return true;
 }
 
 
@@ -121,8 +127,8 @@ bool AppleSound::Play(float volume, float position) {
   alSourcePlay(source_id);
 
   ALenum error;
-  if((error = alGetError()) != AL_NO_ERROR) {
-    printf("error playing sound: %x\n", error);
+  if ((error = alGetError()) != AL_NO_ERROR) {
+    printf("Error playing sound. OpenAL error code: %x\n", error);
     return false;
   }
 

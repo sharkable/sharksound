@@ -18,8 +18,10 @@ namespace SharkSound {
 
 class AppleSound : public Sound {
  public:
-  AppleSound(SoundController *sound_controller, const std::string &filename);
+  AppleSound(SoundController *sound_controller);
   ~AppleSound();
+
+  bool Init(const std::string &filename);
 
   // Sound
   bool Play(float volume = 1.f, float position = 0.f);
