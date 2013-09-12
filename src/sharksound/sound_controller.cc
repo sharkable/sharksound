@@ -18,7 +18,7 @@ void SoundController::SetSoundOn(bool on) {
 }
 
 void SoundController::SetGlobalVolume(float volume) {
-  global_volume_ = volume / 2;
+  global_volume_ = volume;
   for (auto i = sounds_.begin(); i != sounds_.end(); i++) {
     i->second->SetGlobalVolume(global_volume_);
   }
