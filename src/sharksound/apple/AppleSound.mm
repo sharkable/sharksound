@@ -39,16 +39,23 @@ AppleSound::AppleSound(SoundController *sound_controller, const string &filename
   NSString *pre_dot = [ns_filename substringToIndex:dot_location];
   NSString *post_dot = [ns_filename substringFromIndex:dot_location + 1];
 
-  // get some audio data from a wave file
-  CFURLRef file_url =
-      (CFURLRef)[[NSURL fileURLWithPath:[bundle pathForResource:pre_dot ofType:post_dot]] retain];
-  if (!file_url) {
+  // Get some audio data from a sound file.
+  NSString *path = [bundle pathForResource:pre_dot ofType:post_dot];
+  if (!path) {
+    // If we failed to load it, see if we can find it by cutting off the path.
+    size_t slash_location = filename.find_last_of('/');
+    if (slash_location != filename.size()) {
+      NSString *post_slash = [pre_dot substringFromIndex:slash_location + 1];
+      path = [bundle pathForResource:post_slash ofType:post_dot];
+    }
+  }
+  if (!path) {
     NSLog(@"ERRRRRRORRRR WITH FILE URL");
     return;  // TODO throw error... move work out of constructor.
   }
 
+  CFURLRef file_url = (CFURLRef)[[NSURL fileURLWithPath:path] retain];
   audio_data = MyGetOpenALAudioData(file_url, &size, &format, &freq);
-
   CFRelease(file_url);
 
   // grab a buffer ID from openAL
