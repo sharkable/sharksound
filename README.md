@@ -59,7 +59,7 @@ Note on iOS
 
 Xcode by default flattens the directory structure of your assets. Because of this, if you try to
 load `"sounds/foo.wav"` on iOS, SharkSound will first try to load the full path, then try to just
-load `foo.wav"`. This way you can have a directory structure in Android and not worry about that
+load `"foo.wav"`. This way you can have a directory structure in Android and not worry about that
 breaking iOS.
 
 Memory Management
