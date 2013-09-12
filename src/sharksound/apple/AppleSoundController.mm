@@ -10,6 +10,7 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import <Foundation/Foundation.h>
+#import <TargetConditionals.h>
 
 #include "sharksound/apple/AppleSound.h"
 
