@@ -20,6 +20,10 @@ class AndroidSoundInstance {
 
   bool Init(SLEngineItf sl_engine_itf, SLDataSource sl_audio_source, SLDataSink sl_data_sink);
   void Play(float volume, float position);
+  bool PlayLoop();
+  void Rewind();
+  void SetVolume(float volume);
+  void SetPosition(float position);
   void Stop();
 
   bool is_busy() { return is_busy_; }
@@ -31,6 +35,7 @@ class AndroidSoundInstance {
   SLObjectItf sl_player_object_;
   SLPlayItf sl_play_itf_;
   SLVolumeItf sl_volume_itf_;
+  SLSeekItf sl_seek_itf_;
 };
 
 }

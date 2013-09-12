@@ -43,6 +43,8 @@ class AndroidSound : public Sound {
   AndroidSoundInstance * CreateNewInstance();
 
   std::vector<AndroidSoundInstance *> sound_instances_;
+  AndroidSoundInstance *loop_instance_;
+  float loop_volume_;
 
   // OpenSL ES objects
   SLEngineItf sl_engine_itf_;

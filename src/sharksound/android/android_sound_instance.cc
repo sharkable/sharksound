@@ -54,6 +54,10 @@ bool AndroidSoundInstance::Init(SLEngineItf sl_engine_itf, SLDataSource sl_audio
   result = (*sl_player_object_)->GetInterface(sl_player_object_, SL_IID_VOLUME, &sl_volume_itf_);
   if (SL_RESULT_SUCCESS != result) return false;
 
+  // get the seek interface
+  result = (*sl_player_object_)->GetInterface(sl_player_object_, SL_IID_SEEK, &sl_seek_itf_);
+  if (SL_RESULT_SUCCESS != result) return false;
+
   // register a callback
   result = (*sl_play_itf_)->SetCallbackEventsMask(sl_play_itf_, SL_PLAYEVENT_HEADATEND);
   if (SL_RESULT_SUCCESS != result) return false;
@@ -79,6 +83,30 @@ void AndroidSoundInstance::Play(float volume, float position) {
 
   SLresult result = (*sl_play_itf_)->SetPlayState(sl_play_itf_, SL_PLAYSTATE_PLAYING);
   assert(SL_RESULT_SUCCESS == result);
+}
+
+bool AndroidSoundInstance::PlayLoop() {
+  assert(NULL != sl_player_object_);
+  is_busy_ = true;
+
+  SLresult result = (*sl_seek_itf_)->SetLoop(sl_seek_itf_, SL_BOOLEAN_TRUE, 0, SL_TIME_UNKNOWN);
+  assert(SL_RESULT_SUCCESS == result);
+
+  result = (*sl_play_itf_)->SetPlayState(sl_play_itf_, SL_PLAYSTATE_PLAYING);
+  assert(SL_RESULT_SUCCESS == result);
+}
+
+void AndroidSoundInstance::Rewind() {
+  SLresult result = (*sl_seek_itf_)->SetPosition(sl_seek_itf_, 0, SL_SEEKMODE_ACCURATE);
+  assert(SL_RESULT_SUCCESS == result);
+}
+
+void AndroidSoundInstance::SetVolume(float volume) {
+  (*sl_volume_itf_)->SetVolumeLevel(sl_volume_itf_, 1500.0f * log(volume));
+}
+
+void AndroidSoundInstance::SetPosition(float position) {
+  (*sl_volume_itf_)->SetStereoPosition(sl_volume_itf_, 1000.0f * position);
 }
 
 void AndroidSoundInstance::Stop() {

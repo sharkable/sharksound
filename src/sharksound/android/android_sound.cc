@@ -13,7 +13,10 @@
 using namespace SharkSound;
 using std::string;
 
-AndroidSound::AndroidSound(SoundController *sound_controller) : Sound(sound_controller) {
+AndroidSound::AndroidSound(SoundController *sound_controller)
+    : Sound(sound_controller),
+      loop_instance_(NULL),
+      sl_engine_itf_(NULL) {
 }
 
 AndroidSound::~AndroidSound() {
@@ -76,24 +79,57 @@ bool AndroidSound::Play(float volume, float position) {
 }
 
 bool AndroidSound::PlayLoop() {
+  if (!loop_instance_) {
+    loop_instance_ = CreateNewInstance();
+  }
+  if (!loop_instance_) {
+    return false;
+  }
+  loop_instance_->PlayLoop();
 }
 
 bool AndroidSound::StopLoop() {
+  if (!loop_instance_) {
+    return false;
+  }
+  loop_instance_->Stop();
+  return true;
 }
 
 void AndroidSound::RewindLoop() {
+  if (!loop_instance_) {
+    return;
+  }
+  loop_instance_->Rewind();
 }
 
 void AndroidSound::SetLoopVolume(float volume) {
+  loop_volume_ = volume;
+  if (!loop_instance_) {
+    loop_instance_ = CreateNewInstance();
+  }
+  if (!loop_instance_) {
+    return;
+  }
+  loop_instance_->SetVolume(volume);
 }
 
 float AndroidSound::LoopVolume() {
+  return loop_volume_;
 }
 
 void AndroidSound::SetLoopPosition(float position) {
+  if (!loop_instance_) {
+    loop_instance_ = CreateNewInstance();
+  }
+  if (!loop_instance_) {
+    return;
+  }
+  loop_instance_->SetPosition(position);
 }
 
 bool AndroidSound::IsLoopPlaying() {
+  return (!loop_instance_ && !loop_instance_->is_busy());
 }
 
 
