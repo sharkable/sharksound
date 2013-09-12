@@ -49,7 +49,7 @@ SoundController::SoundController()
 SoundController::~SoundController() {
   for (auto i = sounds_.begin(); i != sounds_.end(); i++) {
     delete i->second;
-  } 
+  }
 }
 
 
