@@ -26,7 +26,7 @@ class AndroidSoundController : public SoundController {
   ~AndroidSoundController();
 
  private:
-   Sound * CreateSound(std::string filename);
+   Sound * CreateSound(const std::string &filename);
 
    AAssetManager *asset_manager_;  // weak
 

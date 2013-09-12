@@ -20,12 +20,12 @@ class SoundController {
  public:
   void SetSoundOn(bool on);
   void SetGlobalVolume(float volume);
-  Sound * GetSound(std::string filename);
+  Sound * GetSound(const std::string &filename);
 
  protected:
   SoundController();
   ~SoundController();
-  virtual Sound * CreateSound(std::string filename) = 0;
+  virtual Sound * CreateSound(const std::string &filename) = 0;
 
  private:
   void FreeSound(Sound *sound);

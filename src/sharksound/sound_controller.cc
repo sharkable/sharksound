@@ -24,7 +24,7 @@ void SoundController::SetGlobalVolume(float volume) {
   }
 }
 
-Sound * SoundController::GetSound(std::string filename) {
+Sound * SoundController::GetSound(const std::string &filename) {
   auto i = sounds_.find(filename);
   if (i != sounds_.end()) {
     i->second->IncrementRetainCount();

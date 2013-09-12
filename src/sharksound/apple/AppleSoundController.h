@@ -18,7 +18,7 @@ class AppleSoundController : public SoundController {
   AppleSoundController();
 
  private:
-  Sound * CreateSound(std::string filename);
+  Sound * CreateSound(const std::string &filename);
 };
 
 }

@@ -61,7 +61,7 @@ AndroidSoundController::~AndroidSoundController() {
 
 #pragma mark - private
 
-Sound * AndroidSoundController::CreateSound(std::string filename) {
+Sound * AndroidSoundController::CreateSound(const std::string &filename) {
   AndroidSound *sound = new AndroidSound(this);
   if (sound->Init(asset_manager_, engine_engine_, audio_sink_, filename)) {
     return sound;
