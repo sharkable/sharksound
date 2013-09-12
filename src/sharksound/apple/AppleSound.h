@@ -6,10 +6,13 @@
 //  Copyright 2013 Sharkable. All rights reserved.
 //
 
+#ifndef SHARKSOUND_APPLE_APPLESOUND_H_
+#define SHARKSOUND_APPLE_APPLESOUND_H_
+
 #include <vector>
 
 #include "sharksound/sound.h"
-#include "sharksound/apple/MyOpenALSupport.h"
+#import "sharksound/apple/MyOpenALSupport.h"
 
 namespace SharkSound {
 
@@ -41,3 +44,5 @@ class AppleSound : public Sound {
 };
 
 }
+
+#endif

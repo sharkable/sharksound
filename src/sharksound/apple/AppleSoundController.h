@@ -21,6 +21,6 @@ class AppleSoundController : public SoundController {
   Sound * CreateSound(std::string filename);
 };
 
-#endif
-
 }
+
+#endif

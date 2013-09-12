@@ -8,8 +8,9 @@
 
 #include "sharksound/android/android_sound_instance.h"
 
-using namespace SharkSound;
 #include <math.h>
+
+using namespace SharkSound;
 
 void play_callback(SLPlayItf sl_caller_itf, void *context, SLuint32 event) {
   assert(event == SL_PLAYEVENT_HEADATEND);

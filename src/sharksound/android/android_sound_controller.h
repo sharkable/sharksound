@@ -6,7 +6,6 @@
 //  Copyright 2013 Sharkable. All rights reserved.
 //
 
-// TODO rename this file... depending on SoundEngine redesign.
 #ifndef SHARKSOUND_ANDROID_ANDROIDSOUNDCONTROLLER_
 #define SHARKSOUND_ANDROID_ANDROIDSOUNDCONTROLLER_
 
