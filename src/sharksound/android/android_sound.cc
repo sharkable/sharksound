@@ -40,8 +40,8 @@ bool AndroidSound::Init(AAssetManager *asset_manager, SLEngineItf sl_engine_itf,
   AAsset* asset = AAssetManager_open(asset_manager, filename.c_str(), AASSET_MODE_UNKNOWN);
   // the asset might not be found
   if (NULL == asset) {
-    __android_log_print(ANDROID_LOG_ERROR, "SharkSound", "Error loading %s: File not found.",
-                        filename.c_str());
+    __android_log_print(ANDROID_LOG_ERROR, "SharkSound",
+                        "Error loading %s: File not found or bad format.", filename.c_str());
     return false;
   }
 
