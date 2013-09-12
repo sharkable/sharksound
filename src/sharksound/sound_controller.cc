@@ -60,6 +60,7 @@ SoundController::~SoundController() {
 void SoundController::FreeSound(Sound *sound) {
   for (auto i = sounds_.begin(); i != sounds_.end(); i++) {
     if (i->second == sound) {
+      delete i->second;
       sounds_.erase(i);
       break;
     }

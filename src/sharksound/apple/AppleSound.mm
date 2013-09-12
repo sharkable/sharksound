@@ -23,11 +23,10 @@ AppleSound::~AppleSound() {
   for (auto i = source_ids_.begin(); i != source_ids_.end(); i++) {
     alDeleteSources(1, &(*i));
   }
-  alDeleteSources(1, &loop_source_id_);
+  if (loop_source_id_ != -1) {
+    alDeleteSources(1, &loop_source_id_);
+  }
   alDeleteBuffers(1, &buffer_id_);
-
-  alcDestroyContext(context__);
-  alcCloseDevice(device__);
 }
 
 bool AppleSound::Init(const std::string &filename) {
